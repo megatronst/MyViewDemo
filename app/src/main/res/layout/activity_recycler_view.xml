@@ -5,16 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="f.p.p.myviewdemo.MainActivity">
+    tools:context="f.p.p.myviewdemo.RecyclerViewActivity">
+    <Button
+        android:id="@+id/btn_switch_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/rv_test"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
 
-    <Button
-        android:id="@+id/btn_show_dialog"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/btn_open_dialog" />
-    <Button
-        android:id="@+id/btn_rv_test"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/text_test_recyclerview"/>
+
 </LinearLayout>

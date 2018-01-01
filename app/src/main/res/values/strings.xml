@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">MyViewDemo</string>
+    <string name="btn_open_dialog">打开对话框</string>
+    <string name="dialog_msg">message</string>
+    <string name="btn_sure">sure</string>
+    <string name="btn_no">no</string>
+    <string name="text_test_recyclerview">打开recyclerview测试页</string>
+    <string name="text_test">this is what i want</string>
 </resources>

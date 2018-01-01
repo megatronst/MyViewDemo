@@ -1,5 +1,6 @@
 apply plugin: 'com.android.application'
-
+apply plugin: f.p.p.customplugin.RunPlugin
+//apply plugin: RunPlugin
 android {
     compileSdkVersion 26
     defaultConfig {
@@ -9,20 +10,119 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        flavorDimensions "versionCode"
     }
+    testOptions {
+        unitTests {
+            includeAndroidResources = true
+        }
+    }
+
+    signingConfigs {
+        innerTest.initWith(signingConfigs.debug)
+        release {
+            storeFile file('testKey.jks')
+            storePassword 'password'
+            keyAlias 'testKey'
+            keyPassword 'testKey'
+        }
+    }
+    productFlavors {
+        pay {
+        }
+
+        free {
+
+        }
+    }
+
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
+        }
+        debug {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            applicationIdSuffix "debug"
+            versionNameSuffix "debug"
+            debuggable true
+        }
+        innerTest.initWith(buildTypes.debug)
+        innerTest {
+            applicationIdSuffix "innerTest"
+            versionNameSuffix "innerTest"
+            debuggable false
+            signingConfig signingConfigs.innerTest
         }
     }
 }
 
 dependencies {
-    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:appcompat-v7:26.1.0'
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    testImplementation "org.robolectric:robolectric:3.6.1"
+    implementation 'com.android.support:support-v4:26.1.0'
+    implementation 'com.android.support:recyclerview-v7:26.1.0'
 }
+
+buildscript{
+    repositories{
+        flatDir{ dirs 'libs' }
+    }
+
+    dependencies{
+        classpath 'f.p.p.customeplugin:customplugin'
+    }
+
+}
+
+
+
+task hello << {
+    println 'hello execute!'
+}
+
+hello {
+    println('hello config')
+}
+
+task getPassword {
+    doFirst {
+        def password = ''
+        def privateFile = rootProject.file('private.gradle')
+        if (privateFile.exists()) {
+            Properties properties = new Properties()
+            properties.load(privateFile.newDataInputStream())
+            password = properties.getProperty('release.password')
+            println password
+        }
+
+        if (!password?.trim()) {
+//
+            if (System.console()) {
+                password = new String(System.console().readPassword("what is the password!"))
+            } else {
+                BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))
+                password = reader.readLine()
+            }
+            android.signingConfigs.release.storePassword = password.trim()
+            println "the input password is $password"
+
+        }
+    }
+}
+
+tasks.whenTaskAdded {
+    theTask ->
+        if (theTask.name.equals('packageFreeRelease')) {
+            theTask.dependsOn "getPassword"
+        }
+}
+

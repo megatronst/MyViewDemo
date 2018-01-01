@@ -5,16 +5,16 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="f.p.p.myviewdemo.MainActivity">
-
-    <Button
-        android:id="@+id/btn_show_dialog"
+    tools:context="f.p.p.myviewdemo.UITestActivity">
+    <TextView
+        android:id="@+id/tv_content"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/btn_open_dialog" />
+        tools:text="content"
+        android:gravity="center"/>
     <Button
-        android:id="@+id/btn_rv_test"
+        android:id="@+id/btn_test"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/text_test_recyclerview"/>
+        android:text="点击修改tv内容"/>
 </LinearLayout>
